@@ -1,0 +1,36 @@
+name: Praisabot
+options:
+  bundleIdPrefix: org.savoba
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "16.0"
+settings:
+  SWIFT_VERSION: "6.0"
+  SWIFT_STRICT_CONCURRENCY: complete
+  DEVELOPMENT_TEAM: TBCJC928A5
+  CODE_SIGN_STYLE: Automatic
+targets:
+  Praisabot:
+    type: application
+    platform: iOS
+    sources:
+      - path: Praisabot
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: org.savoba.Praisabot
+      GENERATE_INFOPLIST_FILE: true
+      INFOPLIST_KEY_UILaunchScreen_Generation: true
+      MARKETING_VERSION: "0.1.0"
+      CURRENT_PROJECT_VERSION: 1
+      INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers: [org.savoba.Praisabot.sendPraise]
+    entitlements:
+      path: Praisabot/Praisabot.entitlements
+  PraisabotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: PraisabotTests
+    dependencies:
+      - target: Praisabot
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: org.savoba.PraisabotTests
+      GENERATE_INFOPLIST_FILE: true
