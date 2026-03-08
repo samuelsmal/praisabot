@@ -17,11 +17,14 @@ targets:
       - path: Praisabot
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: org.savoba.Praisabot
-      GENERATE_INFOPLIST_FILE: true
       INFOPLIST_KEY_UILaunchScreen_Generation: true
       MARKETING_VERSION: "0.1.0"
       CURRENT_PROJECT_VERSION: 1
-      INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers: [org.savoba.Praisabot.sendPraise]
+    info:
+      path: Praisabot/Info.plist
+      properties:
+        BGTaskSchedulerPermittedIdentifiers:
+          - org.savoba.Praisabot.sendPraise
     entitlements:
       path: Praisabot/Praisabot.entitlements
   PraisabotTests:
