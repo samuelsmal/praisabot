@@ -4,10 +4,10 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("Messages", systemImage: "message") {
-                Text("Messages")
+                MessageListView()
             }
             Tab("Settings", systemImage: "gear") {
-                Text("Settings")
+                SettingsView()
             }
         }
     }
