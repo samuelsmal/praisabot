@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <clipPath id="rounded">
+      <rect width="1024" height="1024" rx="224"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#rounded)">
+    <!-- 4 equal parallel bands, warm palette -->
+
+    <!-- Darkest -->
+    <rect width="1024" height="1024" fill="#581C87"/>
+
+    <!-- Dark-mid -->
+    <polygon points="0,512 0,0 1024,1024 512,1024" fill="#9333EA"/>
+
+    <!-- Light-mid -->
+    <polygon points="0,0 512,0 1024,512 1024,1024" fill="#C084FC"/>
+
+    <!-- Lightest -->
+    <polygon points="512,0 1024,0 1024,512" fill="#E9D5FF"/>
+
+    <!-- Heart -->
+    <path d="M512 750 C512 750 275 585 275 425 C275 320 358 260 442 260 C488 260 512 298 512 298 C512 298 536 260 582 260 C666 260 749 320 749 425 C749 585 512 750 512 750Z" fill="white"/>
+  </g>
+</svg>
