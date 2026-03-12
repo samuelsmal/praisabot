@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Enforce that MARKETING_VERSION in project.yml has a matching git tag.
+
+set -euo pipefail
+
+version=$(grep 'MARKETING_VERSION:' project.yml | head -1 | sed 's/.*"\(.*\)"/\1/')
+
+if [ -z "$version" ]; then
+    echo "error: could not read MARKETING_VERSION from project.yml"
+    exit 1
+fi
+
+tag="v${version}"
+
+if ! git tag --list "$tag" | grep -q "^${tag}$"; then
+    echo "error: no git tag '${tag}' found for MARKETING_VERSION ${version}"
+    echo "  Run: git tag ${tag}"
+    exit 1
+fi

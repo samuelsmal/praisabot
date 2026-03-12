@@ -11,7 +11,9 @@ APP_PATH = $(DERIVED_DATA)/Build/Products/$(CONFIG)-iphonesimulator/$(SCHEME).ap
 DEVICE_APP_PATH = $(DERIVED_DATA)/Build/Products/$(CONFIG)-iphoneos/$(SCHEME).app
 PHYSICAL_DEVICE = Karl
 
-.PHONY: generate build boot install launch run deploy clean
+VERSION := $(shell grep 'MARKETING_VERSION:' project.yml | head -1 | sed 's/.*"\(.*\)"/\1/')
+
+.PHONY: generate build boot install launch run deploy clean tag
 
 generate:
 	cp CHANGELOG.md Praisabot/Resources/CHANGELOG.md
@@ -48,6 +50,10 @@ deploy: generate
 		-destination 'platform=iOS,name=$(PHYSICAL_DEVICE)' \
 		build
 	xcrun devicectl device install app --device $(shell xcrun devicectl list devices 2>/dev/null | grep '$(PHYSICAL_DEVICE)' | awk '{print $$3}') '$(DEVICE_APP_PATH)'
+
+tag:
+	@echo "Tagging v$(VERSION)"
+	git tag "v$(VERSION)"
 
 clean:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -sdk $(SDK) clean

@@ -45,6 +45,10 @@ struct SettingsView: View {
                         ChangelogView()
                     }
                 }
+
+                Section {
+                    LabeledContent("Version", value: Bundle.main.appVersion)
+                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
