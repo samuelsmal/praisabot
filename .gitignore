@@ -5,3 +5,4 @@ DerivedData/
 *.xcuserdatad/
 .build/
 .claude/
+Praisabot/Resources/CHANGELOG.md

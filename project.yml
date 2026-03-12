@@ -17,20 +17,28 @@ targets:
       - path: Praisabot
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: org.savoba.Praisabot
-      INFOPLIST_KEY_UILaunchScreen_Generation: true
-      INFOPLIST_KEY_UIRequiresFullScreen: true
-      INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
       MARKETING_VERSION: "0.1.0"
       CURRENT_PROJECT_VERSION: 1
     info:
       path: Praisabot/Info.plist
       properties:
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
         UIBackgroundModes:
           - fetch
         BGTaskSchedulerPermittedIdentifiers:
           - org.savoba.Praisabot.sendPraise
     entitlements:
       path: Praisabot/Praisabot.entitlements
+    preBuildScripts:
+      - script: cp "${PROJECT_DIR}/CHANGELOG.md" "${PROJECT_DIR}/Praisabot/Resources/CHANGELOG.md"
+        name: Copy Changelog
+        inputFiles:
+          - $(PROJECT_DIR)/CHANGELOG.md
+        outputFiles:
+          - $(PROJECT_DIR)/Praisabot/Resources/CHANGELOG.md
   PraisabotTests:
     type: bundle.unit-test
     platform: iOS

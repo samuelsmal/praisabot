@@ -8,10 +8,13 @@ BUNDLE_ID = org.savoba.Praisabot
 
 DEVICE_ID = $(shell xcrun simctl list devices available | grep '$(DEVICE_NAME)' | head -1 | sed 's/.*(\([A-F0-9-]*\)).*/\1/')
 APP_PATH = $(DERIVED_DATA)/Build/Products/$(CONFIG)-iphonesimulator/$(SCHEME).app
+DEVICE_APP_PATH = $(DERIVED_DATA)/Build/Products/$(CONFIG)-iphoneos/$(SCHEME).app
+PHYSICAL_DEVICE = Karl
 
-.PHONY: generate build boot install launch run clean
+.PHONY: generate build boot install launch run deploy clean
 
 generate:
+	cp CHANGELOG.md Praisabot/Resources/CHANGELOG.md
 	xcodegen generate
 
 build: generate
@@ -35,6 +38,16 @@ launch:
 	xcrun simctl launch '$(DEVICE_ID)' $(BUNDLE_ID)
 
 run: install launch
+
+deploy: generate
+	xcodebuild \
+		-project $(PROJECT) \
+		-scheme $(SCHEME) \
+		-configuration $(CONFIG) \
+		-derivedDataPath $(DERIVED_DATA) \
+		-destination 'platform=iOS,name=$(PHYSICAL_DEVICE)' \
+		build
+	xcrun devicectl device install app --device $(shell xcrun devicectl list devices 2>/dev/null | grep '$(PHYSICAL_DEVICE)' | awk '{print $$3}') '$(DEVICE_APP_PATH)'
 
 clean:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -sdk $(SDK) clean
