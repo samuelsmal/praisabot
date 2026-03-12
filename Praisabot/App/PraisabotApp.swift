@@ -29,9 +29,14 @@ struct PraisabotApp: App {
 
     @MainActor
     private static func seedDefaultPraisesIfNeeded(modelContainer: ModelContainer) {
+        guard !UserDefaults.standard.bool(forKey: "hasSeededDefaultPraises") else { return }
+
         let context = modelContainer.mainContext
         let count = (try? context.fetchCount(FetchDescriptor<PraiseMessage>())) ?? 0
-        guard count == 0 else { return }
+        guard count == 0 else {
+            UserDefaults.standard.set(true, forKey: "hasSeededDefaultPraises")
+            return
+        }
 
         guard let url = Bundle.main.url(forResource: "DefaultPraises", withExtension: "json"),
               let data = try? Data(contentsOf: url),
@@ -42,6 +47,7 @@ struct PraisabotApp: App {
             context.insert(PraiseMessage(text: text))
         }
         try? context.save()
+        UserDefaults.standard.set(true, forKey: "hasSeededDefaultPraises")
     }
 
     private func retryIfNeeded() {
