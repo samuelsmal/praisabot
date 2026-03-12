@@ -19,6 +19,9 @@ import Testing
     let picked = try service.pickNext(context: context)
 
     #expect(picked != nil)
+    #expect(picked!.sentInCurrentCycle == false)
+
+    try service.markSent(picked!, context: context)
     #expect(picked!.sentInCurrentCycle == true)
 }
 

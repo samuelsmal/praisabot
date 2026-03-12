@@ -37,26 +37,41 @@ struct PraiseScheduler: Sendable {
         }
     }
 
+    static let lastSentDateKey = "lastPraiseSentDate"
+
+    static func sendPraise(modelContainer: ModelContainer) async throws {
+        let context = ModelContext(modelContainer)
+        let shuffleBag = ShuffleBagService()
+        let telegram = TelegramService()
+        let keychain = KeychainService()
+
+        guard let message = try shuffleBag.pickNext(context: context),
+              let botToken = keychain.load(key: "botToken"),
+              !botToken.isEmpty else {
+            return
+        }
+
+        let chatID = UserDefaults.standard.string(forKey: "telegramChatID") ?? ""
+        guard !chatID.isEmpty else { return }
+
+        try await telegram.send(botToken: botToken, chatID: chatID, text: message.text)
+        try shuffleBag.markSent(message, context: context)
+
+        UserDefaults.standard.set(Date.now.timeIntervalSince1970, forKey: lastSentDateKey)
+    }
+
+    static func hasSentToday() -> Bool {
+        let lastSent = UserDefaults.standard.double(forKey: lastSentDateKey)
+        guard lastSent > 0 else { return false }
+        return Calendar.current.isDateInToday(Date(timeIntervalSince1970: lastSent))
+    }
+
     @Sendable
     private static func handleTask(_ task: BGAppRefreshTask, modelContainer: ModelContainer) {
         scheduleNext()
 
         let sendTask = Task { @Sendable in
-            let context = ModelContext(modelContainer)
-            let shuffleBag = ShuffleBagService()
-            let telegram = TelegramService()
-            let keychain = KeychainService()
-
-            guard let message = try shuffleBag.pickNext(context: context),
-                  let botToken = keychain.load(key: "botToken"),
-                  !botToken.isEmpty else {
-                return
-            }
-
-            let chatID = UserDefaults.standard.string(forKey: "telegramChatID") ?? ""
-            guard !chatID.isEmpty else { return }
-
-            try await telegram.send(botToken: botToken, chatID: chatID, text: message.text)
+            try await sendPraise(modelContainer: modelContainer)
         }
 
         nonisolated(unsafe) let bgTask = task

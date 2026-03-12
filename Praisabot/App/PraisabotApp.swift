@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct PraisabotApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     let modelContainer: ModelContainer
 
     init() {
@@ -17,5 +18,18 @@ struct PraisabotApp: App {
             ContentView()
         }
         .modelContainer(modelContainer)
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                PraiseScheduler.scheduleNext()
+                retryIfNeeded()
+            }
+        }
+    }
+
+    private func retryIfNeeded() {
+        guard !PraiseScheduler.hasSentToday() else { return }
+        Task {
+            try? await PraiseScheduler.sendPraise(modelContainer: modelContainer)
+        }
     }
 }

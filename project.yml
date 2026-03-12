@@ -23,6 +23,8 @@ targets:
     info:
       path: Praisabot/Info.plist
       properties:
+        UIBackgroundModes:
+          - fetch
         BGTaskSchedulerPermittedIdentifiers:
           - org.savoba.Praisabot.sendPraise
     entitlements:
