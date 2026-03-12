@@ -48,6 +48,7 @@ struct MessageListView: View {
                 }
             }
             .navigationTitle("Praises")
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(item: $editingMessage) { message in
                 EditMessageView(message: message)
             }
@@ -74,6 +75,7 @@ struct EditMessageView: View {
                     .lineLimit(3...6)
             }
             .navigationTitle("Edit")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
