@@ -1,0 +1,11 @@
+{
+  "planPath": "docs/plans/2026-03-12-default-praises-implementation.md",
+  "tasks": [
+    {"id": 1, "subject": "Task 1: Create the JSON seed file", "status": "pending"},
+    {"id": 2, "subject": "Task 2: Write the failing test for seed loading", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Make the test pass (regenerate project)", "status": "pending", "blockedBy": [2]},
+    {"id": 4, "subject": "Task 4: Implement seeding logic in PraisabotApp", "status": "pending", "blockedBy": [3]},
+    {"id": 5, "subject": "Task 5: Manual smoke test", "status": "pending", "blockedBy": [4]}
+  ],
+  "lastUpdated": "2026-03-12T00:00:00Z"
+}

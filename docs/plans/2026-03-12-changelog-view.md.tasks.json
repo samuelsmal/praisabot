@@ -1,0 +1,11 @@
+{
+  "planPath": "docs/plans/2026-03-12-changelog-view.md",
+  "tasks": [
+    {"id": 0, "subject": "Task 0: Create CHANGELOG.md at project root", "status": "pending"},
+    {"id": 1, "subject": "Task 1: Add build script to copy CHANGELOG.md into app bundle", "status": "pending", "blockedBy": [0]},
+    {"id": 2, "subject": "Task 2: Create ChangelogView with markdown rendering", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Add NavigationLink in SettingsView", "status": "pending", "blockedBy": [2]},
+    {"id": 4, "subject": "Task 4: Test and verify", "status": "pending", "blockedBy": [0, 1, 2, 3]}
+  ],
+  "lastUpdated": "2026-03-12T00:00:00Z"
+}
