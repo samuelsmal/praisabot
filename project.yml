@@ -18,6 +18,8 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: org.savoba.Praisabot
       INFOPLIST_KEY_UILaunchScreen_Generation: true
+      INFOPLIST_KEY_UIRequiresFullScreen: true
+      INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
       MARKETING_VERSION: "0.1.0"
       CURRENT_PROJECT_VERSION: 1
     info:
