@@ -39,8 +39,15 @@ struct SettingsView: View {
                             .foregroundStyle(testStatus.contains("Success") ? .green : .red)
                     }
                 }
+
+                Section {
+                    NavigationLink("Changelog") {
+                        ChangelogView()
+                    }
+                }
             }
             .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 botToken = keychain.load(key: "botToken") ?? ""
             }
