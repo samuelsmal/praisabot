@@ -5,6 +5,9 @@ struct SettingsView: View {
     @State private var botToken = ""
     @State private var testStatus: String?
     @State private var isSending = false
+    @State private var updates: [TelegramUpdate] = []
+    @State private var isFetchingUpdates = false
+    @State private var fetchError: String?
 
     private let keychain = KeychainService()
     private let telegram = TelegramService()
@@ -40,6 +43,53 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Lookup Chat ID") {
+                    Button {
+                        Task { await fetchUpdates() }
+                    } label: {
+                        HStack {
+                            Text("Fetch Recent Messages")
+                            if isFetchingUpdates {
+                                Spacer()
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(botToken.isEmpty || isFetchingUpdates)
+
+                    if let fetchError {
+                        Text(fetchError)
+                            .foregroundStyle(.red)
+                    }
+
+                    ForEach(updates) { update in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(update.chatTitle)
+                                    .font(.headline)
+                                Spacer()
+                                Button {
+                                    chatID = String(update.chatID)
+                                } label: {
+                                    Text("Use")
+                                        .font(.caption)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                            Text("Chat ID: \(update.chatID)")
+                                .font(.caption)
+                                .monospaced()
+                            Text("From: \(update.senderName)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                            Text("\"\(update.text)\" — \(update.date.formatted(.relative(presentation: .named)))")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 2)
+                    }
+                }
+
                 Section {
                     NavigationLink("Changelog") {
                         ChangelogView()
@@ -58,6 +108,20 @@ struct SettingsView: View {
             .onChange(of: botToken) {
                 keychain.save(key: "botToken", value: botToken)
             }
+        }
+    }
+
+    private func fetchUpdates() async {
+        isFetchingUpdates = true
+        fetchError = nil
+        defer { isFetchingUpdates = false }
+        do {
+            updates = try await telegram.getUpdates(botToken: botToken)
+            if updates.isEmpty {
+                fetchError = "No messages found. Send a message to your bot first."
+            }
+        } catch {
+            fetchError = error.localizedDescription
         }
     }
 
