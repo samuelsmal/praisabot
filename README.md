@@ -5,7 +5,7 @@ An iOS app that sends daily praise messages to your loved ones via Telegram.
 ## Features
 
 - **Daily praise delivery** — Sends a random praise message once a day (8–9 AM) via Telegram
-- **40+ default messages** — Ships with multilingual praise messages (DE, FR, IT, RM), ready to use out of the box
+- **Custom default messages** — Seed your own praise messages on first launch (see below)
 - **Shuffle-bag rotation** — No repeats until every message has been sent
 - **Date-based milestones** — Trigger special messages on anniversaries, birthdays, or custom dates
 - **Full message control** — Add, edit, and delete messages from your collection
@@ -40,6 +40,16 @@ An iOS app that sends daily praise messages to your loved ones via Telegram.
    4. Share your bot's handle (e.g. `@YourPraiseBot`) with your partner and ask them to tap **Start**
    5. In the app, go to **Settings**, paste your bot token, then tap **Fetch Recent Messages** to find your partner's Chat ID
    6. Tap **Test message** to verify it works
+
+## Default Praise Messages
+
+The app seeds messages from `Praisabot/Resources/DefaultPraises.json` on first launch. This file is not included in the repository — copy the example and add your own:
+
+```bash
+cp Praisabot/Resources/DefaultPraises.example.json Praisabot/Resources/DefaultPraises.json
+```
+
+Edit the JSON array with whatever messages you'd like. If the file is absent, the app starts with an empty message list and you can add messages manually.
 
 ## Build Commands
 

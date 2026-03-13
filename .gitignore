@@ -6,3 +6,4 @@ DerivedData/
 .build/
 .claude/
 Praisabot/Resources/CHANGELOG.md
+Praisabot/Resources/DefaultPraises.json

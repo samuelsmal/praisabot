@@ -4,6 +4,12 @@ All notable changes to Praisabot will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.3.0] - 2026-03-13
+
+### Changed
+- Move default praise messages to a private, gitignored file (`DefaultPraises.json`)
+- Add `DefaultPraises.example.json` as a template for public users
+
 ## [0.2.0] - 2026-03-13
 
 ### Added
