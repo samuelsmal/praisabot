@@ -4,6 +4,12 @@ All notable changes to Praisabot will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.0] - 2026-03-13
+
+### Added
+- README with setup instructions and build commands
+- GPLv3 license
+
 ## [0.1.0] - 2026-03-12
 
 ### Added
