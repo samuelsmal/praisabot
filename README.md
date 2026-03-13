@@ -32,7 +32,14 @@ An iOS app that sends daily praise messages to your loved ones via Telegram.
    make run
    ```
 
-3. In the app, go to **Settings** and enter your Telegram bot token and chat ID. Tap **Test message** to verify it works.
+3. Set up Telegram:
+
+   1. Open Telegram and message [@BotFather](https://t.me/BotFather)
+   2. Send `/newbot` and follow the prompts to create your bot
+   3. Copy the bot token BotFather gives you
+   4. Share your bot's handle (e.g. `@YourPraiseBot`) with your partner and ask them to tap **Start**
+   5. In the app, go to **Settings**, paste your bot token, then tap **Fetch Recent Messages** to find your partner's Chat ID
+   6. Tap **Test message** to verify it works
 
 ## Build Commands
 

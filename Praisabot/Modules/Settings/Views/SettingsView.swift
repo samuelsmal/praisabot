@@ -15,6 +15,18 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Text("1. Open Telegram and message [@BotFather](https://t.me/BotFather)")
+                    Text("2. Send /newbot and follow the prompts to create your bot")
+                    Text("3. Copy the bot token and paste it below")
+                    Text("4. Share your bot's handle with your partner and ask them to tap **Start**")
+                    Text("5. Tap **Fetch Recent Messages** below to find their Chat ID")
+                } header: {
+                    Text("Setup Guide")
+                } footer: {
+                    Text("Your partner needs to message the bot before you can look up their Chat ID.")
+                }
+
                 Section("Telegram Bot") {
                     SecureField("Bot Token", text: $botToken)
                         .textContentType(.none)

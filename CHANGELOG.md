@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - README with setup instructions and build commands
 - GPLv3 license
+- Setup guide in Settings explaining how to create a bot via BotFather and obtain a Chat ID
 
 ## [0.1.0] - 2026-03-12
 
