@@ -6,6 +6,9 @@ struct ContentView: View {
             Tab("Messages", systemImage: "message") {
                 MessageListView()
             }
+            Tab("Dates", systemImage: "calendar") {
+                MilestoneListView()
+            }
             Tab("Settings", systemImage: "gear") {
                 SettingsView()
             }

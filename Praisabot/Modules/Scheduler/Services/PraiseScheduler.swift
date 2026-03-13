@@ -58,6 +58,10 @@ struct PraiseScheduler: Sendable {
         try shuffleBag.markSent(message, context: context)
 
         UserDefaults.standard.set(Date.now.timeIntervalSince1970, forKey: lastSentDateKey)
+
+        // Check milestones independently
+        let milestoneChecker = MilestoneChecker()
+        try await milestoneChecker.checkAndSend(modelContainer: modelContainer)
     }
 
     static func hasSentToday() -> Bool {
