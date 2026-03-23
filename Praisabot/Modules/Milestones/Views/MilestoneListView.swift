@@ -48,6 +48,15 @@ struct MilestoneListView: View {
 struct MilestoneRow: View {
     @Bindable var milestone: DateMilestone
 
+    private var upcomingTriggers: [MilestoneChecker.UpcomingTrigger] {
+        MilestoneChecker().nextTriggerDates(
+            referenceDate: milestone.referenceDate,
+            preset: milestone.triggerPreset,
+            interval: milestone.triggerInterval,
+            daysList: milestone.triggerDaysList
+        )
+    }
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -59,10 +68,31 @@ struct MilestoneRow: View {
                 Text(milestone.triggerPreset.label)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
+                if !upcomingTriggers.isEmpty {
+                    Divider()
+                    ForEach(Array(upcomingTriggers.enumerated()), id: \.offset) { _, trigger in
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(trigger.date, style: .date)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                            Text(exampleMessage(for: trigger))
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                                .italic()
+                        }
+                    }
+                }
             }
             Spacer()
             Toggle("", isOn: $milestone.isEnabled)
                 .labelsHidden()
         }
+    }
+
+    private func exampleMessage(for trigger: MilestoneChecker.UpcomingTrigger) -> String {
+        let templates = (milestone.messages ?? []).map(\.template)
+        let pool = templates.isEmpty ? [milestone.messageTemplate] : templates
+        let template = pool.first ?? ""
+        return MilestoneChecker().renderTemplate(template, value: trigger.result.value, unit: trigger.result.unit)
     }
 }

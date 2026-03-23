@@ -80,6 +80,38 @@ struct MilestoneChecker: Sendable {
         return renderTemplate(template, value: value, unit: unit)
     }
 
+    struct UpcomingTrigger {
+        let date: Date
+        let result: MilestoneCheckerResult
+    }
+
+    func nextTriggerDates(
+        referenceDate: Date,
+        preset: TriggerPreset,
+        interval: Int,
+        daysList: String?,
+        count: Int = 2,
+        from startDate: Date = .now
+    ) -> [UpcomingTrigger] {
+        let cal = Calendar.current
+        var triggers: [UpcomingTrigger] = []
+        // Search up to 2 years ahead (730 days)
+        for dayOffset in 1...730 {
+            guard let candidate = cal.date(byAdding: .day, value: dayOffset, to: startDate) else { continue }
+            if let result = evaluate(
+                referenceDate: referenceDate,
+                preset: preset,
+                interval: interval,
+                daysList: daysList,
+                now: candidate
+            ) {
+                triggers.append(UpcomingTrigger(date: candidate, result: result))
+                if triggers.count >= count { break }
+            }
+        }
+        return triggers
+    }
+
     func checkAndSend(modelContainer: ModelContainer) async throws {
         let context = ModelContext(modelContainer)
         let telegram = TelegramService()

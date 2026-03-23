@@ -4,6 +4,11 @@ All notable changes to Praisabot will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.5.0] - 2026-03-23
+
+### Added
+- Preview of next two upcoming milestone trigger dates and example messages in milestone list
+
 ## [0.4.0] - 2026-03-23
 
 ### Added
