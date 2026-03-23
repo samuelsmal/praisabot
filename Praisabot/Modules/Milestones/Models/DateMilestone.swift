@@ -30,6 +30,9 @@ final class DateMilestone {
         return list.split(separator: ",").compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
     }
 
+    @Relationship(deleteRule: .cascade, inverse: \MilestoneMessage.milestone)
+    var messages: [MilestoneMessage]? = []
+
     init(
         name: String,
         referenceDate: Date,

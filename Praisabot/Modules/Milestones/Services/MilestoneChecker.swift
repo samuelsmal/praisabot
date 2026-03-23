@@ -75,6 +75,11 @@ struct MilestoneChecker: Sendable {
             .replacingOccurrences(of: "{unit}", with: unit)
     }
 
+    func renderRandomTemplate(from templates: [String], value: Int, unit: String) -> String {
+        let template = templates.randomElement() ?? templates.first ?? ""
+        return renderTemplate(template, value: value, unit: unit)
+    }
+
     func checkAndSend(modelContainer: ModelContainer) async throws {
         let context = ModelContext(modelContainer)
         let telegram = TelegramService()
@@ -96,7 +101,9 @@ struct MilestoneChecker: Sendable {
                 interval: milestone.triggerInterval,
                 daysList: milestone.triggerDaysList
             ) {
-                let text = renderTemplate(milestone.messageTemplate, value: result.value, unit: result.unit)
+                let templates = (milestone.messages ?? []).map(\.template)
+                let pool = templates.isEmpty ? [milestone.messageTemplate] : templates
+                let text = renderRandomTemplate(from: pool, value: result.value, unit: result.unit)
                 try await telegram.send(botToken: botToken, chatID: chatID, text: text)
             }
         }

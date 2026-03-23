@@ -171,3 +171,25 @@ private let today = cal.startOfDay(for: Date.now)
     )
     #expect(rendered == "We are 50000 seconds together!")
 }
+
+@Test func randomTemplatePicksFromPool() {
+    let checker = MilestoneChecker()
+    let templates = [
+        "We are {value} {unit} together!",
+        "Wow, {value} {unit} already!",
+        "{value} {unit} and counting!"
+    ]
+    let rendered = checker.renderRandomTemplate(from: templates, value: 100, unit: "days")
+    let expected = [
+        "We are 100 days together!",
+        "Wow, 100 days already!",
+        "100 days and counting!"
+    ]
+    #expect(expected.contains(rendered))
+}
+
+@Test func randomTemplateFallsBackToFirst() {
+    let checker = MilestoneChecker()
+    let rendered = checker.renderRandomTemplate(from: ["Only option {value}"], value: 42, unit: "days")
+    #expect(rendered == "Only option 42")
+}

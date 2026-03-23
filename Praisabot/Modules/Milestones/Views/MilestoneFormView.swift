@@ -13,7 +13,7 @@ struct MilestoneFormView: View {
     @State private var triggerPreset: TriggerPreset = .everyNDays
     @State private var triggerInterval: Int = 100
     @State private var triggerDaysList: String = ""
-    @State private var messageTemplate: String = ""
+    @State private var messageTemplates: [String] = [""]
 
     private var isEditing: Bool { milestone != nil }
 
@@ -21,19 +21,25 @@ struct MilestoneFormView: View {
         TriggerPreset.presetsFor(direction: direction)
     }
 
+    private var validTemplates: [String] {
+        messageTemplates
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+    }
+
     private var previewText: String {
         let checker = MilestoneChecker()
+        let template = validTemplates.first ?? ""
         if let result = checker.evaluate(
             referenceDate: referenceDate,
             preset: triggerPreset,
             interval: triggerInterval,
             daysList: triggerPreset == .atSpecificDaysRemaining ? triggerDaysList : nil
         ) {
-            return checker.renderTemplate(messageTemplate, value: result.value, unit: result.unit)
+            return checker.renderTemplate(template, value: result.value, unit: result.unit)
         }
-        // Show a sample preview even when not triggering today
         let sampleValue = triggerPreset == .atSpecificDaysRemaining ? 50 : triggerInterval
-        return checker.renderTemplate(messageTemplate, value: sampleValue, unit: triggerPreset.unit)
+        return checker.renderTemplate(template, value: sampleValue, unit: triggerPreset.unit)
     }
 
     var body: some View {
@@ -73,10 +79,28 @@ struct MilestoneFormView: View {
                     }
                 }
 
-                Section("Message") {
-                    TextField("Template", text: $messageTemplate, axis: .vertical)
-                        .lineLimit(3...6)
-                    Text("Use {value} and {unit} as placeholders")
+                Section("Messages") {
+                    ForEach(messageTemplates.indices, id: \.self) { index in
+                        HStack(alignment: .top) {
+                            TextField("Template \(index + 1)", text: $messageTemplates[index], axis: .vertical)
+                                .lineLimit(2...4)
+                            if messageTemplates.count > 1 {
+                                Button(role: .destructive) {
+                                    messageTemplates.remove(at: index)
+                                } label: {
+                                    Image(systemName: "minus.circle.fill")
+                                        .foregroundStyle(.red)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                    Button {
+                        messageTemplates.append("")
+                    } label: {
+                        Label("Add Message", systemImage: "plus.circle")
+                    }
+                    Text("A random message will be sent each time. Use {value} and {unit} as placeholders.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -98,7 +122,7 @@ struct MilestoneFormView: View {
                         save()
                         dismiss()
                     }
-                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || messageTemplate.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || validTemplates.isEmpty)
                 }
             }
             .onAppear {
@@ -109,7 +133,12 @@ struct MilestoneFormView: View {
                     triggerPreset = m.triggerPreset
                     triggerInterval = m.triggerInterval
                     triggerDaysList = m.triggerDaysList ?? ""
-                    messageTemplate = m.messageTemplate
+                    let existing = (m.messages ?? []).map(\.template)
+                    if existing.isEmpty && !m.messageTemplate.isEmpty {
+                        messageTemplates = [m.messageTemplate]
+                    } else if !existing.isEmpty {
+                        messageTemplates = existing
+                    }
                 }
             }
             .onChange(of: direction) {
@@ -123,6 +152,8 @@ struct MilestoneFormView: View {
     }
 
     private func save() {
+        let templates = validTemplates
+
         if let m = milestone {
             m.name = name.trimmingCharacters(in: .whitespaces)
             m.referenceDate = referenceDate
@@ -130,18 +161,24 @@ struct MilestoneFormView: View {
             m.triggerPreset = triggerPreset
             m.triggerInterval = triggerInterval
             m.triggerDaysList = triggerPreset == .atSpecificDaysRemaining ? triggerDaysList : nil
-            m.messageTemplate = messageTemplate
+            m.messageTemplate = templates.first ?? ""
+            // Replace existing messages
+            for msg in m.messages ?? [] {
+                modelContext.delete(msg)
+            }
+            m.messages = templates.map { MilestoneMessage(template: $0, milestone: m) }
         } else {
             let m = DateMilestone(
                 name: name.trimmingCharacters(in: .whitespaces),
                 referenceDate: referenceDate,
                 direction: direction,
-                messageTemplate: messageTemplate,
+                messageTemplate: templates.first ?? "",
                 triggerPreset: triggerPreset,
                 triggerInterval: triggerInterval,
                 triggerDaysList: triggerPreset == .atSpecificDaysRemaining ? triggerDaysList : nil
             )
             modelContext.insert(m)
+            m.messages = templates.map { MilestoneMessage(template: $0, milestone: m) }
         }
     }
 }
