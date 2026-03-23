@@ -4,6 +4,11 @@ All notable changes to Praisabot will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.4.0] - 2026-03-23
+
+### Added
+- Local notification when a praise or milestone message is sent
+
 ## [0.3.0] - 2026-03-13
 
 ### Changed
