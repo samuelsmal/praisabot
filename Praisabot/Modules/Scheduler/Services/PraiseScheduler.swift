@@ -56,6 +56,7 @@ struct PraiseScheduler: Sendable {
 
         try await telegram.send(botToken: botToken, chatID: chatID, text: message.text)
         try shuffleBag.markSent(message, context: context)
+        NotificationService().postSentNotification(text: message.text)
 
         UserDefaults.standard.set(Date.now.timeIntervalSince1970, forKey: lastSentDateKey)
 

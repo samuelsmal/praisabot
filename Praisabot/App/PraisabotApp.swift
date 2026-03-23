@@ -12,6 +12,7 @@ struct PraisabotApp: App {
         Self.seedDefaultPraisesIfNeeded(modelContainer: container)
         PraiseScheduler.register(modelContainer: container)
         PraiseScheduler.scheduleNext()
+        NotificationService().requestPermission()
     }
 
     var body: some Scene {

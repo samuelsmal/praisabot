@@ -105,6 +105,7 @@ struct MilestoneChecker: Sendable {
                 let pool = templates.isEmpty ? [milestone.messageTemplate] : templates
                 let text = renderRandomTemplate(from: pool, value: result.value, unit: result.unit)
                 try await telegram.send(botToken: botToken, chatID: chatID, text: text)
+                NotificationService().postSentNotification(text: text)
             }
         }
     }
