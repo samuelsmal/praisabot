@@ -54,8 +54,15 @@ struct PraiseScheduler: Sendable {
         let chatID = UserDefaults.standard.string(forKey: "telegramChatID") ?? ""
         guard !chatID.isEmpty else { return }
 
-        try await telegram.send(botToken: botToken, chatID: chatID, text: message.text)
+        do {
+            try await telegram.send(botToken: botToken, chatID: chatID, text: message.text)
+            context.insert(SentMessageLog(text: message.text, type: .praise, success: true))
+        } catch {
+            context.insert(SentMessageLog(text: message.text, type: .praise, success: false, errorMessage: error.localizedDescription))
+            throw error
+        }
         try shuffleBag.markSent(message, context: context)
+        try context.save()
         NotificationService().postSentNotification(text: message.text)
 
         UserDefaults.standard.set(Date.now.timeIntervalSince1970, forKey: lastSentDateKey)
