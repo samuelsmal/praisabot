@@ -7,7 +7,7 @@ struct PraisabotApp: App {
     let modelContainer: ModelContainer
 
     init() {
-        let container = try! ModelContainer(for: PraiseMessage.self, DateMilestone.self, MilestoneMessage.self)
+        let container = try! ModelContainer(for: PraiseMessage.self, DateMilestone.self, MilestoneMessage.self, SentMessageLog.self)
         self.modelContainer = container
         Self.seedDefaultPraisesIfNeeded(modelContainer: container)
         PraiseScheduler.register(modelContainer: container)
