@@ -7,8 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ## [0.6.0] - 2026-04-10
 
 ### Added
-- Log tab showing history of all sent messages with delivery status
-- Track success and failure for both praise and milestone sends
+- Log tab showing sent praise and milestone messages with delivery status
+- Persist failure log entries for failed sends
 
 ## [0.5.0] - 2026-03-23
 

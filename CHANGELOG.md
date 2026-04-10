@@ -4,6 +4,12 @@ All notable changes to Praisabot will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.6.0] - 2026-04-10
+
+### Added
+- Log tab showing sent praise and milestone messages with delivery status
+- Persist failure log entries for failed sends
+
 ## [0.5.0] - 2026-03-23
 
 ### Added
