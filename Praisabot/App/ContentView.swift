@@ -9,6 +9,9 @@ struct ContentView: View {
             Tab("Dates", systemImage: "calendar") {
                 MilestoneListView()
             }
+            Tab("Log", systemImage: "clock.arrow.circlepath") {
+                LogView()
+            }
             Tab("Settings", systemImage: "gear") {
                 SettingsView()
             }
