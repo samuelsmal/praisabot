@@ -1,0 +1,12 @@
+{
+  "planPath": "docs/plans/2026-04-10-log-tab.md",
+  "tasks": [
+    {"id": 1, "subject": "Task 1: Create SentMessageLog model and MessageType enum", "status": "pending"},
+    {"id": 2, "subject": "Task 2: Log praise sends in PraiseScheduler", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Log milestone sends in MilestoneChecker", "status": "pending", "blockedBy": [1]},
+    {"id": 4, "subject": "Task 4: Create LogView", "status": "pending", "blockedBy": [1]},
+    {"id": 5, "subject": "Task 5: Add Log tab to ContentView", "status": "pending", "blockedBy": [4]},
+    {"id": 6, "subject": "Task 6: Build and verify", "status": "pending", "blockedBy": [2, 3, 5]}
+  ],
+  "lastUpdated": "2026-04-10T00:00:00Z"
+}
