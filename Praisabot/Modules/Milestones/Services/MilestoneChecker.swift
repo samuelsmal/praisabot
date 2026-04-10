@@ -143,8 +143,8 @@ struct MilestoneChecker: Sendable {
                 } catch {
                     context.insert(SentMessageLog(text: text, type: .milestone, success: false, errorMessage: error.localizedDescription))
                 }
-                try context.save()
             }
         }
+        try context.save()
     }
 }

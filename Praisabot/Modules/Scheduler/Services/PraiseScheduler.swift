@@ -59,6 +59,7 @@ struct PraiseScheduler: Sendable {
             context.insert(SentMessageLog(text: message.text, type: .praise, success: true))
         } catch {
             context.insert(SentMessageLog(text: message.text, type: .praise, success: false, errorMessage: error.localizedDescription))
+            try? context.save()
             throw error
         }
         try shuffleBag.markSent(message, context: context)
