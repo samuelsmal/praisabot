@@ -136,8 +136,14 @@ struct MilestoneChecker: Sendable {
                 let templates = (milestone.messages ?? []).map(\.template)
                 let pool = templates.isEmpty ? [milestone.messageTemplate] : templates
                 let text = renderRandomTemplate(from: pool, value: result.value, unit: result.unit)
-                try await telegram.send(botToken: botToken, chatID: chatID, text: text)
-                NotificationService().postSentNotification(text: text)
+                do {
+                    try await telegram.send(botToken: botToken, chatID: chatID, text: text)
+                    context.insert(SentMessageLog(text: text, type: .milestone, success: true))
+                    NotificationService().postSentNotification(text: text)
+                } catch {
+                    context.insert(SentMessageLog(text: text, type: .milestone, success: false, errorMessage: error.localizedDescription))
+                }
+                try context.save()
             }
         }
     }
